@@ -50,23 +50,29 @@ import com.example.module_3_lesson_9_hw_1_compose.R
 import com.example.module_3_lesson_9_hw_1_compose.ui.MainViewModel
 import com.example.module_3_lesson_9_hw_1_compose.ui.theme.Grey10
 import com.example.module_3_lesson_9_hw_1_compose.ui.theme.Purple40
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
     viewModelMain: MainViewModel
 ) {
-    val messagesListViewModel by viewModelMain.messagesList.collectAsState()
+    val messagesListViewModelOld by viewModelMain.messagesListOld.collectAsState()
     var inputText by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
-    val listState = rememberLazyListState()
+    val listStateOld = rememberLazyListState()
 
     val currentUser by viewModelMain.currentUser.collectAsState()
+    val messagesList by viewModelMain.messagesList.collectAsState()
 
-    LaunchedEffect(key1 = messagesListViewModel.size) {
-        if (messagesListViewModel.isNotEmpty()) {
-            listState.animateScrollToItem(index = messagesListViewModel.size - 1)
+
+
+    LaunchedEffect(key1 = messagesListViewModelOld.size) {
+        if (messagesListViewModelOld.isNotEmpty()) {
+            listStateOld.animateScrollToItem(index = messagesListViewModelOld.size - 1)
         }
     }
 
@@ -115,10 +121,10 @@ fun ChatScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f),
-                state = listState,
+                state = listStateOld,
                 horizontalAlignment = Alignment.Start
             ) {
-                itemsIndexed(messagesListViewModel) { index, item ->
+                itemsIndexed(messagesListViewModelOld) { index, item ->
                     Card(
                         modifier = Modifier
                             .padding(
@@ -134,6 +140,34 @@ fun ChatScreen(
                             modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
                             text = item
                         )
+                    }
+                }
+                itemsIndexed(messagesList) { index, item ->
+                    Card(
+                        modifier = Modifier
+                            .padding(
+                                vertical = dimensionResource(id = R.dimen.padding_xsmall),
+                                horizontal = dimensionResource(id = R.dimen.padding_small)
+                            ),
+                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_medium)),
+                        colors = CardDefaults.cardColors(Color.White),
+                        border = BorderStroke(dimensionResource(id = R.dimen.thickness_divider), Grey10),
+                        elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.padding_xsmall))
+                    ) {
+                        Row() {
+                            Text(
+                                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
+                                text = item.sender
+                            )
+                            Text(
+                                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
+                                text = item.content
+                            )
+                            Text(
+                                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
+                                text = SimpleDateFormat("HH:mm").format(item.timestamp)
+                            )
+                        }
                     }
                 }
             }

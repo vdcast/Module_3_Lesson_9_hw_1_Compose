@@ -19,7 +19,7 @@ class DbFirebaseManager : DbRepository {
             reference.child(it).setValue(message)
         }
     }
-    override fun getAllMessagesOld(callback: DbCallbackAllMessagesReceived) {
+    override fun getAllMessagesOld(callback: DbCallbackAllMessagesReceivedOld) {
         val messages = arrayListOf<String>()
         val reference = database.reference.child("db").child("chat")
 
@@ -27,12 +27,12 @@ class DbFirebaseManager : DbRepository {
             override fun onDataChange(snapshot: DataSnapshot) {
                 messages.clear()
                 for (item in snapshot.children) {
-                    val value: String? = item.value as? String
+                    val value: String? = item.getValue(String::class.java)
                     value?.let {
                         messages.add(value)
                     }
                 }
-                callback.onAllMessagesReceived(messages = messages)
+                callback.onAllMessagesReceivedOld(messages = messages)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -81,12 +81,39 @@ class DbFirebaseManager : DbRepository {
             reference.child(it).setValue(message)
         }
     }
+
+    override fun getAllMessages(callback: DbCallbackAllMessagesReceived) {
+        val messages = arrayListOf<Message>()
+        val reference = database.reference.child("db").child("chats")
+            .child("messages")
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                messages.clear()
+                for (item in snapshot.children) {
+                    val value: Message? = item.getValue(Message::class.java)
+                    value?.let {
+                        messages.add(value)
+                    }
+                }
+                callback.onAllMessagesReceived(messages = messages)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("MYLOG", "2 | Messages not received :(")
+            }
+
+        })
+    }
 }
 
-interface DbCallbackAllMessagesReceived {
-    fun onAllMessagesReceived(messages: ArrayList<String>)
+interface DbCallbackAllMessagesReceivedOld {
+    fun onAllMessagesReceivedOld(messages: ArrayList<String>)
 }
 
 interface DbCallbackLoginSuccessful {
     fun onSuccessfulLogin(currentUser: String)
+}
+
+interface DbCallbackAllMessagesReceived {
+    fun onAllMessagesReceived(messages: ArrayList<Message>)
 }
