@@ -3,13 +3,29 @@ package com.example.module_3_lesson_9_hw_1_compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -22,10 +38,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.module_3_lesson_9_hw_1_compose.ui.MainViewModel
 import com.example.module_3_lesson_9_hw_1_compose.ui.theme.Module_3_Lesson_9_hw_1_ComposeTheme
+import com.example.module_3_lesson_9_hw_1_compose.ui.theme.Purple40
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,36 +74,89 @@ class MainActivity : ComponentActivity() {
 fun MyApp(
     viewModelMain: MainViewModel = viewModel()
 ) {
-    var inputText by remember { mutableStateOf("") }
-
     val messagesListViewModel by viewModelMain.messagesList.collectAsState()
+    var inputText by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Hello bro!")
 
-        OutlinedTextField(
-            value = inputText,
-            onValueChange = {
-                inputText = it
-            }
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = dimensionResource(id = R.dimen.padding_medium)),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Icon(imageVector = Icons.Default.Clear, contentDescription = "clear messages")
+            Text(
+                text = "Brother",
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Image(
+                modifier = Modifier
+                    .size(dimensionResource(id = R.dimen.padding_xlarge))
+                    .clip(CircleShape),
+                painter = painterResource(id = R.drawable.wiz_khalifa_1), 
+                contentDescription = "avatar"
+            )
+        }
 
-        Button(onClick = {
-            viewModelMain.sendMessage(inputText)
-        }) { Text(text = "SEND") }
 
         LazyColumn() {
             itemsIndexed(messagesListViewModel) { index, item ->
                 Text(text = item)
             }
         }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.padding_medium)),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(0.8f),
+                value = inputText,
+                onValueChange = {
+                    inputText = it
+                },
+                label = { Text(text = stringResource(id = R.string.message)) },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { focusManager.clearFocus() }
+                ),
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_large))
+            )
+            IconButton(
+                modifier = Modifier
+                    .size(dimensionResource(id = R.dimen.padding_large))
+                    .clip(CircleShape)
+                    .background(Purple40),
+                onClick = {
+                    viewModelMain.sendMessage(inputText)
+                    inputText = ""
+                },
+                enabled = inputText.isNotEmpty()
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.padding_large)),
+                    painter = painterResource(id = R.drawable.baseline_arrow_upward_48),
+                    contentDescription = "send message",
+                    tint = Color.White
+                )
+            }
+
+        }
     }
-
-
 }
 
 @Preview(showBackground = true)

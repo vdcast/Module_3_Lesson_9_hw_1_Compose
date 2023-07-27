@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Module_3_Lesson_9_hw_1_Compose</string>
+    <string name="send">Send</string>
+    <string name="message">Message</string>
 </resources>
