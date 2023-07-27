@@ -111,6 +111,8 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(0.5f),
             onClick = {
 
+                viewModelMain.login(username = inputLogin, password = inputPassword)
+
                 onLoginClicked()
             },
             enabled = inputLogin.isNotEmpty() && inputPassword.isNotEmpty()

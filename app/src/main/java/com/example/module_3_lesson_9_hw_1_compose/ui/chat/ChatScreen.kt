@@ -62,6 +62,8 @@ fun ChatScreen(
 
     val listState = rememberLazyListState()
 
+    val currentUser by viewModelMain.currentUser.collectAsState()
+
     LaunchedEffect(key1 = messagesListViewModel.size) {
         if (messagesListViewModel.isNotEmpty()) {
             listState.animateScrollToItem(index = messagesListViewModel.size - 1)
@@ -165,7 +167,10 @@ fun ChatScreen(
                         .clip(CircleShape)
                         .background(Purple40),
                     onClick = {
-                        viewModelMain.sendMessage(inputText)
+//                        viewModelMain.sendMessageOld(inputText)
+
+                        viewModelMain.sendMessage(currentUser, inputText)
+
                         inputText = ""
                     },
                     enabled = inputText.isNotEmpty()

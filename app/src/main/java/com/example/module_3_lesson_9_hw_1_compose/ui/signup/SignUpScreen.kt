@@ -91,6 +91,7 @@ fun SignUpScreen(
         Button(
             modifier = Modifier.fillMaxWidth(0.5f),
             onClick = {
+                viewModelMain.createUser(username = inputLogin, password = inputPassword)
                 onCreateClicked()
             },
             enabled = inputLogin.isNotEmpty() && inputPassword.isNotEmpty()
