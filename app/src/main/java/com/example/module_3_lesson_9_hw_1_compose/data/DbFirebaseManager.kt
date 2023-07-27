@@ -39,6 +39,11 @@ class DbFirebaseManager : DbRepository {
 
         })
     }
+
+    override fun createUser(username: String, password: String) {
+        val reference = database.reference.child("db").child("users")
+
+    }
 }
 
 interface DbCallback {

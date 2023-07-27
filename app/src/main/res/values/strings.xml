@@ -2,4 +2,13 @@
     <string name="app_name">Module_3_Lesson_9_hw_1_Compose</string>
     <string name="send">Send</string>
     <string name="message">Message</string>
+    <string name="login_title">Welcome to vdcast chat!</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="remember_me">Remember me</string>
+    <string name="create_account_title">Create your account</string>
+    <string name="create_account">Create Account</string>
+    <string name="cancel">Cancel</string>
 </resources>
