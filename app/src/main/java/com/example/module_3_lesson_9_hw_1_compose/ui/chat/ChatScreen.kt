@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,12 +44,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import com.example.module_3_lesson_9_hw_1_compose.R
 import com.example.module_3_lesson_9_hw_1_compose.ui.MainViewModel
 import com.example.module_3_lesson_9_hw_1_compose.ui.theme.Grey10
@@ -106,9 +109,10 @@ fun ChatScreen(
             ) {
                 Icon(
                     modifier = Modifier
-                        .scale(1.25f),
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "clear messages",
+                        .size(dimensionResource(id = R.dimen.padding_large))
+                        .graphicsLayer(scaleX = -1f),
+                    painter = painterResource(id = R.drawable.baseline_logout_48),
+                    contentDescription = "send message"
                 )
                 Text(
                     text = "Brother",
@@ -230,7 +234,7 @@ fun ChatScreen(
                             .size(dimensionResource(id = R.dimen.padding_large)),
                         painter = painterResource(id = R.drawable.baseline_arrow_upward_48),
                         contentDescription = "send message",
-                        tint = Color.White
+                        tint = Color.White,
                     )
                 }
             }
