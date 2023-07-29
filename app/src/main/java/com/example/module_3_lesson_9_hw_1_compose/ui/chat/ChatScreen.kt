@@ -28,6 +28,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -174,7 +176,11 @@ fun ChatScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = dimensionResource(id = R.dimen.padding_medium))
+                    .background(Grey10)
+                    .padding(
+                        top = dimensionResource(id = R.dimen.padding_xsmall),
+                        bottom = dimensionResource(id = R.dimen.padding_small)
+                    )
                     .weight(0.125f),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -186,7 +192,10 @@ fun ChatScreen(
                     onValueChange = {
                         inputText = it
                     },
-                    label = { Text(text = stringResource(id = R.string.message)) },
+//                    label = { Text(text = stringResource(id = R.string.message)) },
+                    placeholder = {
+                        if (inputText.isEmpty()) Text(text = stringResource(id = R.string.message))
+                    },
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done,
                     ),
@@ -194,6 +203,9 @@ fun ChatScreen(
                         onDone = { focusManager.clearFocus() }
                     ),
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_large)),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        containerColor = Color.White
+                    )
                 )
                 IconButton(
                     modifier = Modifier
@@ -217,7 +229,6 @@ fun ChatScreen(
                         tint = Color.White
                     )
                 }
-
             }
         }
     }
