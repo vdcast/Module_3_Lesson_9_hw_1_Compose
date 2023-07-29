@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -72,13 +73,15 @@ fun ChatScreen(
 
 
 
-    LaunchedEffect(key1 = messagesListViewModelOld.size) {
-        if (messagesListViewModelOld.isNotEmpty()) {
-            listStateOld.animateScrollToItem(index = messagesListViewModelOld.size - 1)
+    LaunchedEffect(key1 = messagesList.size) {
+        if (messagesList.isNotEmpty()) {
+            listStateOld.animateScrollToItem(index = messagesList.size - 1)
         }
     }
 
-    Box() {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Image(
             painter = painterResource(id = R.drawable.clouds),
             contentDescription = "background image",
@@ -126,24 +129,24 @@ fun ChatScreen(
                 state = listStateOld,
                 horizontalAlignment = Alignment.Start
             ) {
-                itemsIndexed(messagesListViewModelOld) { index, item ->
-                    Card(
-                        modifier = Modifier
-                            .padding(
-                                vertical = dimensionResource(id = R.dimen.padding_xsmall),
-                                horizontal = dimensionResource(id = R.dimen.padding_small)
-                            ),
-                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_medium)),
-                        colors = CardDefaults.cardColors(Color.White),
-                        border = BorderStroke(dimensionResource(id = R.dimen.thickness_divider), Grey10),
-                        elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.padding_xsmall))
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
-                            text = item
-                        )
-                    }
-                }
+//                itemsIndexed(messagesListViewModelOld) { index, item ->
+//                    Card(
+//                        modifier = Modifier
+//                            .padding(
+//                                vertical = dimensionResource(id = R.dimen.padding_xsmall),
+//                                horizontal = dimensionResource(id = R.dimen.padding_small)
+//                            ),
+//                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_medium)),
+//                        colors = CardDefaults.cardColors(Color.White),
+//                        border = BorderStroke(dimensionResource(id = R.dimen.thickness_divider), Grey10),
+//                        elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.padding_xsmall))
+//                    ) {
+//                        Text(
+//                            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
+//                            text = item
+//                        )
+//                    }
+//                }
                 itemsIndexed(messagesList) { index, item ->
                     Card(
                         modifier = Modifier
@@ -180,8 +183,7 @@ fun ChatScreen(
                     .padding(
                         top = dimensionResource(id = R.dimen.padding_xsmall),
                         bottom = dimensionResource(id = R.dimen.padding_small)
-                    )
-                    .weight(0.125f),
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
@@ -205,7 +207,9 @@ fun ChatScreen(
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_large)),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = Color.White
-                    )
+                    ),
+                    singleLine = false,
+                    maxLines = 5
                 )
                 IconButton(
                     modifier = Modifier
