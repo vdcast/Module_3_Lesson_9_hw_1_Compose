@@ -95,6 +95,7 @@ class DbFirebaseManager : DbRepository {
                         messages.add(value)
                     }
                 }
+                messages.sortBy { it.timestamp }
                 callback.onAllMessagesReceived(messages = messages)
             }
 

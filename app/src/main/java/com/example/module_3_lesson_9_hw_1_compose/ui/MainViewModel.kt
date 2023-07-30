@@ -23,7 +23,6 @@ class MainViewModel : ViewModel() {
     val messagesList: StateFlow<List<Message>> = _messagesList
 
     init {
-        getAllMessagesOld()
         getAllMessages()
     }
 
