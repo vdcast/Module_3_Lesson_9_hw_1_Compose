@@ -1,12 +1,9 @@
 package com.example.module_3_lesson_9_hw_1_compose.ui.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.module_3_lesson_9_hw_1_compose.ChatApplication
 import com.example.module_3_lesson_9_hw_1_compose.data.SharedPreferencesRepository
 import com.example.module_3_lesson_9_hw_1_compose.ui.MainViewModel
 import com.example.module_3_lesson_9_hw_1_compose.ui.chat.ChatScreen
@@ -19,12 +16,12 @@ fun ChatAppNavGraph(
     navController: NavHostController,
     prefs: SharedPreferencesRepository
 ) {
-
-
-    Log.d("MYLOG", prefs.getUsername().toString())
     NavHost(
         navController = navController,
-        startDestination = ScreenRoutes.LoginScreen.route
+        startDestination = when (prefs.getRememberCounter()) {
+             0 -> ScreenRoutes.LoginScreen.route
+            else -> ScreenRoutes.ChatScreen.route
+        }
     ) {
         composable(ScreenRoutes.LoginScreen.route) {
             LoginScreen(

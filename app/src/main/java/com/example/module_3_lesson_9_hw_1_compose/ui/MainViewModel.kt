@@ -15,11 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 class MainViewModel(private val prefs: SharedPreferencesRepository) : ViewModel() {
     private val dbManager = DbFirebaseManager()
 
-    fun kek() {
-        prefs.setPassword("daw")
-    }
-
-    private val _currentUser = MutableStateFlow("")
+    private val _currentUser = MutableStateFlow(prefs.getUsername() ?: "")
     val currentUser: StateFlow<String> = _currentUser
 
     private val _messagesList = MutableStateFlow(listOf<Message>())
@@ -28,24 +24,6 @@ class MainViewModel(private val prefs: SharedPreferencesRepository) : ViewModel(
     val snackbarError = MutableStateFlow<String?>(null)
 
     val isCheckedRememberMeViewModel = MutableStateFlow<Boolean>(false)
-
-//    private val _messagesListOld = MutableStateFlow(listOf<String>())
-//    val messagesListOld: StateFlow<List<String>> = _messagesListOld
-
-//    init {
-//        getAllMessages()
-//    }
-
-//    fun sendMessageOld(message: String) {
-//        dbManager.sendMessageOld(message)
-//    }
-//    private fun getAllMessagesOld() {
-//        dbManager.getAllMessagesOld(object : DbCallbackAllMessagesReceivedOld {
-//            override fun onAllMessagesReceivedOld(messages: ArrayList<String>) {
-//                _messagesListOld.value = messages.toList()
-//            }
-//        })
-//    }
 
     fun createUser(username: String, password: String) {
         dbManager.createUser(username, password)
@@ -91,9 +69,9 @@ class MainViewModel(private val prefs: SharedPreferencesRepository) : ViewModel(
         prefs.setUsername("")
         prefs.setPassword("")
         prefs.setRememberCounter(0)
-        Log.d("MYLOG", prefs.getUsername().toString())
-        Log.d("MYLOG", prefs.getPassword().toString())
-        Log.d("MYLOG", prefs.getRememberCounter().toString())
+        Log.d("MYLOG", "1 | ${prefs.getUsername().toString()}")
+        Log.d("MYLOG", "1 | ${prefs.getPassword().toString()}")
+        Log.d("MYLOG", "1 | ${prefs.getRememberCounter().toString()}")
     }
 
     fun rememberMe(username: String, password: String) {
@@ -101,9 +79,21 @@ class MainViewModel(private val prefs: SharedPreferencesRepository) : ViewModel(
             prefs.setUsername(username)
             prefs.setPassword(password)
             prefs.setRememberCounter(5)
-            Log.d("MYLOG", prefs.getUsername().toString())
-            Log.d("MYLOG", prefs.getPassword().toString())
-            Log.d("MYLOG", prefs.getRememberCounter().toString())
+            Log.d("MYLOG", "2 | ${prefs.getUsername().toString()}")
+            Log.d("MYLOG", "2 | ${prefs.getPassword().toString()}")
+            Log.d("MYLOG", "2 | ${prefs.getRememberCounter().toString()}")
         }
+    }
+
+
+    fun decreaseRememberMeCounter() {
+        var rememberCounter = prefs.getRememberCounter()
+        Log.d("MYLOG", "3 | ${rememberCounter.toString()}")
+        if (rememberCounter > 0) {
+            rememberCounter--
+            prefs.setRememberCounter(rememberCounter)
+        }
+        Log.d("MYLOG", "3 | ${rememberCounter.toString()}")
+        getAllMessages()
     }
 }

@@ -72,6 +72,9 @@ fun ChatScreen(
             listState.animateScrollToItem(index = messagesList.size - 1)
         }
     }
+    LaunchedEffect(key1 = Unit) {
+        viewModelMain.decreaseRememberMeCounter()
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -200,10 +203,7 @@ fun ChatScreen(
                         .clip(CircleShape)
                         .background(Purple40),
                     onClick = {
-//                        viewModelMain.sendMessageOld(inputText)
-
                         viewModelMain.sendMessage(currentUser, inputText)
-
                         inputText = ""
                     },
                     enabled = inputText.isNotEmpty()
