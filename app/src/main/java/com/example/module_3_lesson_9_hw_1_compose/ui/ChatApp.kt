@@ -10,7 +10,7 @@ import com.example.module_3_lesson_9_hw_1_compose.ui.navigation.ChatAppNavGraph
 
 @Composable
 fun ChatApp(
-    viewModelMain: MainViewModel = viewModel(),
+    viewModelMain: MainViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
 ) {
     ChatAppNavGraph(

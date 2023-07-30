@@ -1,19 +1,23 @@
 package com.example.module_3_lesson_9_hw_1_compose.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.module_3_lesson_9_hw_1_compose.data.DbCallbackAllMessagesReceived
-import com.example.module_3_lesson_9_hw_1_compose.data.DbCallbackAllMessagesReceivedOld
 import com.example.module_3_lesson_9_hw_1_compose.data.DbCallbackLoginSuccessful
 import com.example.module_3_lesson_9_hw_1_compose.data.DbCallbackUserNotFound
 import com.example.module_3_lesson_9_hw_1_compose.data.DbCallbackWrongPassword
 import com.example.module_3_lesson_9_hw_1_compose.data.DbFirebaseManager
 import com.example.module_3_lesson_9_hw_1_compose.data.Message
+import com.example.module_3_lesson_9_hw_1_compose.data.SharedPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val prefs: SharedPreferencesRepository) : ViewModel() {
     private val dbManager = DbFirebaseManager()
 
+    fun kek() {
+        prefs.setPassword("daw")
+    }
 
     private val _currentUser = MutableStateFlow("")
     val currentUser: StateFlow<String> = _currentUser
@@ -53,6 +57,13 @@ class MainViewModel : ViewModel() {
                 override fun onSuccessfulLogin(currentUser: String) {
                     _currentUser.value = currentUser
                     getAllMessages()
+
+                    prefs.setUsername(username)
+                    prefs.setPassword(password)
+                    prefs.setRememberCounter(5)
+                    Log.d("MYLOG", prefs.getUsername().toString())
+                    Log.d("MYLOG", prefs.getPassword().toString())
+                    Log.d("MYLOG", prefs.getRememberCounter().toString())
                 }
             },
             object : DbCallbackWrongPassword {
