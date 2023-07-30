@@ -120,32 +120,41 @@ fun ChatScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 itemsIndexed(messagesList) { index, item ->
-                    Card(
-                        modifier = Modifier
-                            .padding(
-                                vertical = dimensionResource(id = R.dimen.padding_xsmall),
-                                horizontal = dimensionResource(id = R.dimen.padding_small)
-                            ),
-                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_medium)),
-                        colors = CardDefaults.cardColors(Color.White),
-                        border = BorderStroke(dimensionResource(id = R.dimen.thickness_divider), Grey10),
-                        elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.padding_xsmall))
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = when (item.sender) {
+                            currentUser -> Alignment.BottomEnd
+                            else -> Alignment.BottomStart
+                        }
                     ) {
-                        Row() {
-                            Text(
-                                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
-                                text = item.sender
-                            )
-                            Text(
-                                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
-                                text = item.content
-                            )
-                            Text(
-                                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
-                                text = SimpleDateFormat("HH:mm").format(item.timestamp)
-                            )
+                        Card(
+                            modifier = Modifier
+                                .padding(
+                                    vertical = dimensionResource(id = R.dimen.padding_xsmall),
+                                    horizontal = dimensionResource(id = R.dimen.padding_small)
+                                ),
+                            shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_medium)),
+                            colors = CardDefaults.cardColors(Color.White),
+                            border = BorderStroke(dimensionResource(id = R.dimen.thickness_divider), Grey10),
+                            elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.padding_xsmall))
+                        ) {
+                            Row() {
+                                Text(
+                                    modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
+                                    text = item.sender
+                                )
+                                Text(
+                                    modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
+                                    text = item.content
+                                )
+                                Text(
+                                    modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_s_m)),
+                                    text = SimpleDateFormat("HH:mm").format(item.timestamp)
+                                )
+                            }
                         }
                     }
+
                 }
             }
             Row(
@@ -169,12 +178,6 @@ fun ChatScreen(
                     placeholder = {
                         if (inputText.isEmpty()) Text(text = stringResource(id = R.string.message))
                     },
-//                    keyboardOptions = KeyboardOptions(
-////                        imeAction = ImeAction.Done,
-//                    ),
-//                    keyboardActions = KeyboardActions(
-//                        onDone = { focusManager.clearFocus() }
-//                    ),
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_large)),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = Color.White
