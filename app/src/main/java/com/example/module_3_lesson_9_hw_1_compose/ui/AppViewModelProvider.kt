@@ -9,7 +9,7 @@ import com.example.module_3_lesson_9_hw_1_compose.ChatApplication
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            MainViewModel(chatApplication().prefs)
+            MainViewModel(chatApplication().container.prefs)
         }
     }
 }
