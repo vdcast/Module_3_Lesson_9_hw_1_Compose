@@ -48,6 +48,8 @@ fun LoginScreen(
 
     var isCheckedRememberMe by remember { mutableStateOf(false) }
 
+//    val isCheckedRememberMeViewModel by viewModelMain.isCheckedRememberMeViewModel.collectAsState()
+
     val focusManager = LocalFocusManager.current
 
     val snackbarError by viewModelMain.snackbarError.collectAsState()
@@ -125,6 +127,7 @@ fun LoginScreen(
                 checked = isCheckedRememberMe,
                 onCheckedChange = {
                     isCheckedRememberMe = it
+                    viewModelMain.isCheckedRememberMeViewModel.value = it
                 }
             )
             Text(text = stringResource(id = R.string.remember_me))
@@ -134,8 +137,9 @@ fun LoginScreen(
         Button(
             modifier = Modifier.fillMaxWidth(0.5f),
             onClick = {
-
                 viewModelMain.login(username = inputLogin, password = inputPassword)
+
+//                viewModelMain.rememberMe(username = inputLogin, password = inputPassword)
 
                 coroutineScope.launch {
                     delay(1_000)

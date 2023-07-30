@@ -27,6 +27,7 @@ class MainViewModel(private val prefs: SharedPreferencesRepository) : ViewModel(
 
     val snackbarError = MutableStateFlow<String?>(null)
 
+    val isCheckedRememberMeViewModel = MutableStateFlow<Boolean>(false)
 
 //    private val _messagesListOld = MutableStateFlow(listOf<String>())
 //    val messagesListOld: StateFlow<List<String>> = _messagesListOld
@@ -57,13 +58,7 @@ class MainViewModel(private val prefs: SharedPreferencesRepository) : ViewModel(
                 override fun onSuccessfulLogin(currentUser: String) {
                     _currentUser.value = currentUser
                     getAllMessages()
-
-                    prefs.setUsername(username)
-                    prefs.setPassword(password)
-                    prefs.setRememberCounter(5)
-                    Log.d("MYLOG", prefs.getUsername().toString())
-                    Log.d("MYLOG", prefs.getPassword().toString())
-                    Log.d("MYLOG", prefs.getRememberCounter().toString())
+                    rememberMe(username, password)
                 }
             },
             object : DbCallbackWrongPassword {
@@ -91,5 +86,24 @@ class MainViewModel(private val prefs: SharedPreferencesRepository) : ViewModel(
 
     fun logout() {
         _currentUser.value = ""
+
+        isCheckedRememberMeViewModel.value = false
+        prefs.setUsername("")
+        prefs.setPassword("")
+        prefs.setRememberCounter(0)
+        Log.d("MYLOG", prefs.getUsername().toString())
+        Log.d("MYLOG", prefs.getPassword().toString())
+        Log.d("MYLOG", prefs.getRememberCounter().toString())
+    }
+
+    fun rememberMe(username: String, password: String) {
+        if (isCheckedRememberMeViewModel.value) {
+            prefs.setUsername(username)
+            prefs.setPassword(password)
+            prefs.setRememberCounter(5)
+            Log.d("MYLOG", prefs.getUsername().toString())
+            Log.d("MYLOG", prefs.getPassword().toString())
+            Log.d("MYLOG", prefs.getRememberCounter().toString())
+        }
     }
 }
