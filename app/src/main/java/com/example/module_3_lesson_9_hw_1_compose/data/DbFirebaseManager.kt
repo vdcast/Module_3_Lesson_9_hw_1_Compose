@@ -45,7 +45,13 @@ class DbFirebaseManager : DbRepository {
         val reference = database.reference.child("db").child("users")
         reference.child(username).setValue(User(username = username, password = password))
     }
-    override fun login(username: String, password: String, callback: DbCallbackLoginSuccessful) {
+    override fun login(
+        username: String,
+        password: String,
+        callbackLoginSuccessful: DbCallbackLoginSuccessful,
+        callbackWrongPassword: DbCallbackWrongPassword,
+        callbackUserNotFound: DbCallbackUserNotFound
+    ) {
         val reference = database.reference.child("db").child("users").child(username)
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -53,11 +59,13 @@ class DbFirebaseManager : DbRepository {
                 if (user != null) {
                     if (user.password == password) {
                         Log.d("MYLOG", "Successful login")
-                        callback.onSuccessfulLogin(user.username)
+                        callbackLoginSuccessful.onSuccessfulLogin(user.username)
                     } else {
+                        callbackWrongPassword.onWrongPassword()
                         Log.d("MYLOG", "Wrong password")
                     }
                 } else {
+                    callbackUserNotFound.onUserNotFound()
                     Log.d("MYLOG", "User not found")
                 }
             }
@@ -110,11 +118,15 @@ class DbFirebaseManager : DbRepository {
 interface DbCallbackAllMessagesReceivedOld {
     fun onAllMessagesReceivedOld(messages: ArrayList<String>)
 }
-
+interface DbCallbackAllMessagesReceived {
+    fun onAllMessagesReceived(messages: ArrayList<Message>)
+}
 interface DbCallbackLoginSuccessful {
     fun onSuccessfulLogin(currentUser: String)
 }
-
-interface DbCallbackAllMessagesReceived {
-    fun onAllMessagesReceived(messages: ArrayList<Message>)
+interface DbCallbackWrongPassword {
+    fun onWrongPassword()
+}
+interface DbCallbackUserNotFound {
+    fun onUserNotFound()
 }

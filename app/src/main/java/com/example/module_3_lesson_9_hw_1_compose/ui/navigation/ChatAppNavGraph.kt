@@ -21,12 +21,27 @@ fun ChatAppNavGraph(
         composable(ScreenRoutes.LoginScreen.route) {
             LoginScreen(
                 viewModelMain = viewModelMain,
-                onLoginClicked = { navController.navigate(ScreenRoutes.ChatScreen.route) },
+                onLoginClicked = {
+                    navController.navigate(ScreenRoutes.ChatScreen.route) {
+                        popUpTo(ScreenRoutes.LoginScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                },
                 onSignUpClicked = { navController.navigate(ScreenRoutes.SignUpScreen.route) }
             )
         }
         composable(ScreenRoutes.ChatScreen.route) {
-            ChatScreen(viewModelMain = viewModelMain)
+            ChatScreen(
+                viewModelMain = viewModelMain,
+                onLogoutCLicked = {
+                    navController.navigate(ScreenRoutes.LoginScreen.route) {
+                        popUpTo(ScreenRoutes.ChatScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable(ScreenRoutes.SignUpScreen.route) {
             SignUpScreen(

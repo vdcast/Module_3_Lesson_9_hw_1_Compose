@@ -3,6 +3,7 @@ package com.example.module_3_lesson_9_hw_1_compose.ui.chat
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,18 +52,19 @@ import com.example.module_3_lesson_9_hw_1_compose.R
 import com.example.module_3_lesson_9_hw_1_compose.ui.MainViewModel
 import com.example.module_3_lesson_9_hw_1_compose.ui.theme.Grey10
 import com.example.module_3_lesson_9_hw_1_compose.ui.theme.Purple40
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
-    viewModelMain: MainViewModel
+    viewModelMain: MainViewModel,
+    onLogoutCLicked: () -> Unit
 ) {
     var inputText by remember { mutableStateOf("") }
     val currentUser by viewModelMain.currentUser.collectAsState()
     val messagesList by viewModelMain.messagesList.collectAsState()
     val listState = rememberLazyListState()
-    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = messagesList.size) {
         if (messagesList.isNotEmpty()) {
@@ -96,7 +100,11 @@ fun ChatScreen(
                 Icon(
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.padding_large))
-                        .graphicsLayer(scaleX = -1f),
+                        .graphicsLayer(scaleX = -1f)
+                        .clickable {
+                            onLogoutCLicked()
+                            viewModelMain.logout()
+                        },
                     painter = painterResource(id = R.drawable.baseline_logout_48),
                     contentDescription = "send message"
                 )
