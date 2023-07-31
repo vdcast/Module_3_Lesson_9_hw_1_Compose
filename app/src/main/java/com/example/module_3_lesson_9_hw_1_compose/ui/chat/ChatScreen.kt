@@ -113,7 +113,7 @@ fun ChatScreen(
                     contentDescription = "send message"
                 )
                 Text(
-                    text = "Brother",
+                    text = currentUser,
                     style = MaterialTheme.typography.headlineSmall
                 )
                 Image(
