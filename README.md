@@ -1,7 +1,7 @@
 # Module_3_Lesson_9_hw_1_Compose
 **Lesson's topic:**
 
-Firebase
+Firebase.
 
 **Task:**
 
